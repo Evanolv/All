@@ -1,0 +1,214 @@
+#!/bin/bash
+
+clear
+FichierIP="/etc/network/interfaces"
+FichierDNS="/etc/resolv.conf"
+read -p "Voulez-vous de nouveaux allias ? Oui/Non" allias
+if [ $allias = "Oui" ];
+then
+	echo " 
+	# Lister les fichiers avec détails
+	alias l='ls -l'
+	# Lister tous les fichiers, y compris les fichiers cachés
+	alias la='ls -la'
+	# Aller vers le répertoire parent
+	alias ..='cd ..'
+	# Aller vers le répertoire précédent
+	alias cd-='cd -'
+	# Afficher l'adresse IP publique
+	alias myip='curl ifconfig.me'
+	# Créer un nouveau répertoire et s'y déplacer
+	mkcd() {
+	  mkdir -p "$1" && cd "$1"
+	}
+	# Afficher les statistiques d'utilisation du disque pour chaque répertoire
+	alias duf='du -h --max-depth=1 | sort -hr'
+	# Trouver la fréquence d'utilisation des commandes
+	alias cmdstats='history | awk '\''{print $2}'\'' | sort | uniq -c | sort -nr'
+	# Trouver les fichiers modifiés dans les dernières 24 heures
+	alias modifiedtoday='find . -type f -mtime -1'
+	# Copier le chemin absolu du répertoire courant dans le presse-papiers
+	alias cpwd='pwd | tr -d "\n" | xclip -selection clipboard'
+	# Afficher les interfaces réseau
+	alias ifconfig='ip a'
+	# Lister tous les processus de manière hiérarchique
+	alias pstree='pstree -a'
+	# Rechercher un fichier avec un motif dans le contenu
+	alias findinfiles='grep -rnw'
+	# Compresser un fichier ou un répertoire en tar.gz
+	alias tarzcvf='tar -zcvf'
+	# Extraire un fichier tar.gz
+	alias tarzxvf='tar -zxvf'
+	# Afficher les informations sur la mémoire avec plus de détails
+	alias meminfofull='cat /proc/meminfo'
+	# Tuer tous les processus d'un utilisateur
+	alias killuser='pkill -u'
+	# Afficher l'utilisation du disque pour chaque répertoire
+	alias diskusage='du -h --max-depth=1'
+	# Afficher les fichiers récemment consultés
+	alias recentlyused='find ~/.local/share/recently-used -type f'
+	# Trouver les fichiers dans le répertoire actuel et ses sous-répertoires
+	alias findfiles='find . -type f'
+	# Afficher la liste des utilisateurs connectés
+	alias whoisconnected='who'
+	# Vérifier l'intégrité d'un fichier avec sha256sum
+	alias sha256='sha256sum -c'
+	# Changer le répertoire racine du serveur web (Apache)
+	alias changewwwroot='sudo nano /etc/apache2/sites-available/000-default.conf'
+	# Recharger la configuration d'Apache
+	alias reloadapache='sudo systemctl reload apache2'
+	# Vérifier les mises à jour du système
+	alias checkupdates='sudo apt list --upgradable'
+	#Mettre à jour le système
+	alias update='sudo apt update && sudo apt upgrade'
+	# Installer un paquet
+	alias install='sudo apt install'
+	# Supprimer un paquet
+	alias remove='sudo apt remove'
+	# Rechercher un paquet
+	alias search='apt search'
+	# Afficher l'espace disque disponible
+	alias diskspace='df -h'
+	# Afficher les processus en cours d'exécution
+	alias ps='ps aux'
+	# Redémarrer le système
+	alias reboot='sudo reboot'
+	# Arrêter le système
+	alias shutdown='sudo shutdown now'
+	# Afficher l'historique des commandes avec des numéros de ligne
+	alias history='history | nl'
+	# Éditer le fichier de configuration du shell
+	alias editrc='nano ~/.bashrc'  # Changez nano selon votre éditeur préféré
+	# Sourcez le fichier de configuration du shell
+	alias reload='source ~/.bashrc'
+	# Trouver la taille d'un répertoire
+	alias dirsize='du -h --max-depth=1'
+	# Afficher les connexions réseau
+	alias netstat='sudo netstat -tulpn'
+	# Afficher les informations sur le processeur
+	alias cpuinfo='lscpu'
+	# Afficher les informations sur la mémoire
+	alias meminfo='free -h'
+	# Vider le cache DNS
+	alias flushdns='sudo systemd-resolve --flush-caches'
+	# Trouver la liste des paquets installés
+	alias listpackages='dpkg --list'
+	# Trouver les fichiers les plus volumineux dans le répertoire actuel
+	alias largestfiles='du -h --max-depth=1 | sort -hr'
+	# Rechercher un fichier dans le système
+	alias findfile='sudo find / -type f -name'
+	# Tuer un processus par nom
+	alias killprocess='pkill'
+	# Éditer le fichier de configuration sudoers
+	alias editsudoers='sudo visudo'
+	# Afficher les informations sur la distribution Debian
+	alias debianinfo='cat /etc/os-release'
+	# Afficher l'utilisation du processeur en temps réel
+	alias cpuusage='top'
+	# Afficher les journaux système
+	alias syslog='cat /var/log/syslog'
+	# Lister les ports ouverts
+	alias openports='sudo lsof -i -P -n | grep LISTEN'
+	# Voir les derniers fichiers modifiés dans le répertoire actuel
+	alias lastmodified='ls -lt'
+	# Accéder rapidement au répertoire personnel
+	alias home='cd ~'" >> /etc/bash.bashrc
+	source /etc/bash.bashrc
+fi
+# Affichage général
+echo "Quelle configuration voulez-vous faire"
+echo "1) Interface "
+echo "2) DNS"
+echo "3) Nom de la machine"
+echo "4) Tout"
+echo -n "Votre choix : "
+read Choix
+clear
+
+# Choix de l'interface
+echo "interface à configurer"
+interfaces=($(ip a | awk -F': ' '{print $2}'))
+echo "Parmi ces interfaces choisissez parmi ces interfaces : "
+printf "\n%s\n" "${interfaces[@]}"
+echo ""
+echo -n "Interface à configurer : "
+read Interface
+clear
+# Configuration de l'interface
+echo "Configuration de l'adresse IP présente dans le fichier /etc/network/interfaces, choisissez entre static ou DHCP :"
+read ChoixIPconfig
+echo "L'interface $Interface va être configurée en $ChoixIPconfig"
+if [ "$ChoixIPconfig" = "static" ]; 
+then
+	echo "Configuration en static"
+        echo -n "Saisir l'IP de la machine : "
+        read IPstatic
+        echo -n "Saisir le masque de 1 à 32 : "
+        read mask
+        echo -n "Saisir la gateway : "
+        read GW
+        echo "auto $Interface" > "$FichierIP"
+        echo "iface $Interface inet static" >> "$FichierIP"
+        echo "  address $IPstatic/$mask" >> "$FichierIP"
+        echo "  gateway $GW" >> "$FichierIP"
+        ifdown "$Interface"
+        ifup "$Interface"
+fi
+
+    if [ "$ChoixIPconfig" = "DHCP" ];
+	then
+        	echo "auto $Interface" > "$FichierIP"
+        	echo "iface $Interface inet dhcp" >> "$FichierIP"
+        	ifdown "$Interface"
+        	ifup "$Interface"
+	fi
+# Configuration des DNS
+echo "Configuration des DNS"
+rm /etc/resolv.conf.back
+mv /etc/resolv.conf /etc/resolv.conf.back
+touch /etc/resolv.conf
+echo "La configuration est la suivante :"
+cat "$FichierDNS"
+echo "Voulez-vous l'éditer [Oui/Non]"
+read ChoixDNS
+clear
+if [ "$ChoixDNS" = "Oui" ]; 
+then
+	echo "Il y a un domaine [Oui/Non]?"
+        read Choixdomaine
+        if [ "$Choixdomaine" = "Oui" ] || [ "$Choixdomaine" = "oui" ]; 
+	then
+            echo -n "Saisir le nom de domaine : "
+            read Nomdedomaine
+            echo "search $Nomdedomaine" >> "$FichierDNS"
+            echo "domain $Nomdedomaine" >> "$FichierDNS"
+        fi
+
+       echo "Saisir le nom des DNS (IP)"
+       echo "Taper fin quand vous avez fini la saisie"
+       while true; do
+            read DNSIP
+            if [ "$DNSIP" = "fin" ]; then
+                clear
+                cat "$FichierDNS"
+                break
+            else
+                echo "nameserver $DNSIP" >> "$FichierDNS"
+            fi
+        done
+fi
+# Configuration du nom de la machine
+echo -n "le nom de la machine est : "
+cat /ect/hostname
+echo -n "saisir le nouveau nom : "
+read hostname
+hostnamectl hostname $hostname
+echo "voulez-vous reboot ?[Oui/Non] : "
+read lChoice
+if [ "$lChoice" = "Oui" ];
+then
+	reboot
+fi
+else
+	echo "Script fini" 
+fi
