@@ -1,3 +1,43 @@
-#Ce script permet l'instalation rapide de apache 2 ainsi que c'est virtual host
-#mise à jour des paquets root
+#Mise à jour des sources et des paquets
+#apt update -y && apt upgrade -y
+
+if [ -e /usr/sbin/apache2 ]
+then
+    echo "Apache n'existe pas"
+    echo "Installation"
+    apt install -y apache2
+    clear
+    echo "Apache2 à été installer avec succes"
+else
+    echo "Apache2 est déja installer"
+fi
+if [ -e ~/site ]
+then
+        clear
+else
+        mkdir site
+fi
+
+echo "Veuillez vous assurez que les index ou les fichier soit contenus dans le dossier site"
+echo "assurez-vous d'être dans le repértoire de votre utilisateur actuel et de ne pas déposer de dossier dans le dossie>echo "Par exemple si vous effectuer la commande ls dans le dossier site vous ne devez voir que exemple.html et un dossi>read -p "Sont-ils présent ? Y/N : " Choice1
+if [ Choice1 -a "Y" ]
+then
+    read -p "Comment s'appelle votre site : " Nom_site
+    echo "copie des fichiers dans le bon repértoire"
+    mkdir /var/www/$Nom_site
+    cp ~/site/* /var/www/$Nom_site
+    cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/$Nom_site.conf
+    # PRBL ICI A CORRIGER
+    grep occurrence /etc/apache2/sites-available/1.conf | sed "s\DocumentRoot /var/www/html\DocumentRoot /var/www/10\g" /etc/apache2/sites-available/10.conf
+else
+    echo "ajouter les dans le dossier avant de relancer le script"
+    exit
+fi
+
+if [ -e /etc/apache2/sites-enable/000-default.conf ]
+then
+    a2dissite 000-default.conf
+fi
+a2ensite $Nom_site.conf
+exit
 
