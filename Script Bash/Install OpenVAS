@@ -607,4 +607,4 @@ echo "**************************************************************************
 #Lancement de openvas
 xdg-open "http://127.0.0.1:9392" 2>/dev/null >/dev/null &
 
-echo "Greenbone peut être joint à cette adresse : http://local
+echo "Greenbone peut être joint à cette adresse : http://localhost:9392"
