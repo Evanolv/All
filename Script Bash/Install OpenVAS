@@ -1,20 +1,36 @@
+#Les version sont à changer pour voir le dernière version regarder les liens suivants :
+
 #Version GVM-Libs
+#https://github.com/greenbone/gvm-libs
 export GVM_LIBS_VERSION=22.7.3
+
 #Version gvmd
+#https://github.com/greenbone/gvmd
 export GVMD_VERSION=23.0.1
+
 #Version pg-gvm
+#https://github.com/greenbone/pg-gvm/
 export PG_GVM_VERSION=22.6.1
+
 #Version GSA
+#https://github.com/greenbone/gsa
 export GSA_VERSION=22.8.0
+
 #Version GSAD
+#https://github.com/greenbone/gsad/
 export GSAD_VERSION=22.7.0
 #Version OPENVAS
+
 export OPENVAS_SMB_VERSION=22.5.3
 #Version OPENVAS_SCANNER
 export OPENVAS_SCANNER_VERSION=22.7.6
+
 #Version OSPD_OPENVAS
+#https://github.com/greenbone/ospd-openvas/
 export OSPD_OPENVAS_VERSION=22.6.1
+
 #Version NOTUS
+#https://github.com/greenbone/notus-scanner
 export NOTUS_VERSION=22.6.0
 
 #Paquet utilisée pour l'install
