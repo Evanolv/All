@@ -626,13 +626,13 @@ echo "Ce message apparaîtra dans les logs: update_scap_end: Updating SCAP info 
 echo "Dans ce fichier: /var/log/gvm/gvmd.log "
 echo "*****************************************************************************************************"
 
-touch greenbone-feed-sync-update.sh
-echo "#!/bin/bash" >> greenbone-feed-sync-update.sh
-echo "/usr/local/bin/greenbone-nvt-sync" >> greenbone-feed-sync-update.sh
-echo "/usr/local/bin/greenbone-certdata-sync" >> greenbone-feed-sync-update.sh
-echo "/usr/local/bin/greenbone-scapdata-sync" >> greenbone-feed-sync-update.sh
-chmod +x /root/greenbone-feed-sync-update.sh
-echo "30 2 * * * root /root/greenbone-feed-sync-update.sh" >> /etc/crontab
+touch ~/greenbone-feed-sync-update.sh
+echo "#!/bin/bash" >>~/greenbone-feed-sync-update.sh
+echo "/usr/local/bin/greenbone-nvt-sync" >> ~/greenbone-feed-sync-update.sh
+echo "/usr/local/bin/greenbone-certdata-sync" >> ~/greenbone-feed-sync-update.sh
+echo "/usr/local/bin/greenbone-scapdata-sync" >> ~/greenbone-feed-sync-update.sh
+chmod +x ~/greenbone-feed-sync-update.sh
+echo "30 2 * * * root ~/greenbone-feed-sync-update.sh" >> /etc/crontab
 #Lancement de openvas
 xdg-open "http://127.0.0.1:9392" 2>/dev/null >/dev/null &
 
