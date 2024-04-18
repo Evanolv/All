@@ -2,36 +2,39 @@
 
 #Version GVM-Libs
 #https://github.com/greenbone/gvm-libs
-export GVM_LIBS_VERSION=22.7.3
+export GVM_LIBS_VERSION=22.9.0
 
 #Version gvmd
 #https://github.com/greenbone/gvmd
-export GVMD_VERSION=23.0.1
+export GVMD_VERSION=23.5.2
 
 #Version pg-gvm
 #https://github.com/greenbone/pg-gvm/
-export PG_GVM_VERSION=22.6.1
+export PG_GVM_VERSION=22.6.5
 
 #Version GSA
 #https://github.com/greenbone/gsa
-export GSA_VERSION=22.8.0
+export GSA_VERSION=23.0.0
 
 #Version GSAD
 #https://github.com/greenbone/gsad/
-export GSAD_VERSION=22.7.0
-#Version OPENVAS
+export GSAD_VERSION=22.9.1
 
-export OPENVAS_SMB_VERSION=22.5.3
+#Version OPENVAS
+#https://github.com/greenbone/openvas-smb
+export OPENVAS_SMB_VERSION=22.5.6
+
 #Version OPENVAS_SCANNER
-export OPENVAS_SCANNER_VERSION=22.7.6
+#https://github.com/greenbone/openvas-scanner
+export OPENVAS_SCANNER_VERSION=23.0.1
 
 #Version OSPD_OPENVAS
 #https://github.com/greenbone/ospd-openvas/
-export OSPD_OPENVAS_VERSION=22.6.1
+export OSPD_OPENVAS_VERSION=22.7.0
 
 #Version NOTUS
 #https://github.com/greenbone/notus-scanner
-export NOTUS_VERSION=22.6.0
+export NOTUS_VERSION=22.6.2
 
 #Paquet utilisée pour l'install
 apt install -y sudo
@@ -413,12 +416,12 @@ sudo systemctl enable redis-server@openvas.service
 sudo usermod -aG redis gvm
 
 #Installation du broker Mosquitto
-sudo apt install -y mosquitto
+#sudo apt install -y mosquitto
 
 #Démarrage du broker et ajout de l'uri du serveur à la configuration d'openvas-scanner
-sudo systemctl start mosquitto.service
-sudo systemctl enable mosquitto.service
-echo -e "mqtt_server_uri = localhost:1883\ntable_driven_lsc = yes" | sudo tee -a /etc/openvas/openvas.conf
+#sudo systemctl start mosquitto.service
+#sudo systemctl enable mosquitto.service
+#echo -e "mqtt_server_uri = localhost:1883\ntable_driven_lsc = yes" | sudo tee -a /etc/openvas/openvas.conf
 
 #Ajuster les permissions des répertoires
 sudo mkdir -p /var/lib/notus
@@ -604,7 +607,9 @@ sudo cp -v $BUILD_DIR/gsad.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl restart gsad
 
-greenbone-feed-sync
+mkdir /var/lib/openvas/
+chown -R gvm:gvm /var/lib/openvas/
+sudo -u gvm /usr/local/bin/greenbone-feed-sync
 
 clear
 #Téléchargement des données à partir du flux communautaire Greenbone
@@ -630,4 +635,4 @@ echo "30 2 * * * root /root/greenbone-feed-sync-update.sh" >> /etc/crontab
 #Lancement de openvas
 xdg-open "http://127.0.0.1:9392" 2>/dev/null >/dev/null &
 
-echo "Greenbone peut être joint à cette adresse : http://mon_ip:9392"
+echo "Greenbone peut être joint à cette adresse : http://[mon_ip]:9392"
