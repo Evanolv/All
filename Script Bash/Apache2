@@ -1,3 +1,4 @@
+#!/bin/bash
 #Mise à jour des sources et des paquets
 #apt update -y && apt upgrade -y
 
